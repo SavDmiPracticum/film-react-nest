@@ -20,7 +20,7 @@ export class TicketDto {
   seat: number;
 }
 
-export class OrderDto {
+export class PostOrderDto {
   @IsEmail()
   email: string;
   @IsPhoneNumber()

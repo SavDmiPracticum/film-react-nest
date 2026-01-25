@@ -15,4 +15,16 @@ export class FilmsRepository {
     const film = await this.filmModel.findOne({ id: id }).exec();
     return film;
   }
+  async updateFilmTaken(
+    filmId: string,
+    scheduleId: string,
+    seats: string[],
+  ): Promise<Film> {
+    return await this.filmModel
+      .findOneAndUpdate(
+        { id: filmId, 'schedule.id': scheduleId },
+        { $addToSet: { 'schedule.$.taken': { $each: seats } } },
+      )
+      .exec();
+  }
 }
