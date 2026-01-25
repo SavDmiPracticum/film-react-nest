@@ -6,7 +6,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PostOrderDto, TicketDto } from './dto/order.dto';
-import { InjectModel } from '@nestjs/mongoose';
 import { randomUUID } from 'node:crypto';
 
 @Injectable()
