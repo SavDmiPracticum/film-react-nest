@@ -14,7 +14,7 @@ export class FilmsService {
     const films: FilmDto[] = await this.filmsRepository.getFilms();
     return {
       total: films.length,
-      item: films,
+      items: films,
     };
   }
 
@@ -27,7 +27,7 @@ export class FilmsService {
 
     return {
       total: schedules.length,
-      item: schedules,
+      items: schedules,
     };
   }
 }

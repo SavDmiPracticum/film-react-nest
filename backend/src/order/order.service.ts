@@ -11,7 +11,7 @@ import { randomUUID } from 'node:crypto';
 
 @Injectable()
 export class OrderService {
-  constructor(@InjectModel('film') private filmsRepository: FilmsRepository) {}
+  constructor(private readonly filmsRepository: FilmsRepository) {}
   async createOrder(orderDto: PostOrderDto) {
     const tickets: TicketDto[] = orderDto.tickets;
     const saleTickets = [];
@@ -52,7 +52,7 @@ export class OrderService {
 
     return {
       total: saleTickets.length,
-      item: saleTickets,
+      items: saleTickets,
     };
   }
 }

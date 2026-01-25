@@ -17,9 +17,10 @@ import { FilmsRepository } from './repository/films.repository';
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
+      envFilePath: '.env',
     }),
     ServeStaticModule.forRoot({
-      rootPath: path.resolve(__dirname, '..', 'public'),
+      rootPath: path.resolve(__dirname, '..', 'public', 'content', 'afisha'),
       serveRoot: '/content/afisha',
     }),
     MongooseModule.forRootAsync({

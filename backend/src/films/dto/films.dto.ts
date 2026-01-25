@@ -32,7 +32,7 @@ export class FilmDto {
 
 export class FilmsDtoResponse {
   total: number;
-  item: FilmDto[];
+  items: FilmDto[];
 }
 
 export class ScheduleDto {
@@ -57,5 +57,5 @@ export class ScheduleDto {
 
 export class SchedulesDtoResponse {
   total: number;
-  item: ScheduleDto[];
+  items: ScheduleDto[];
 }
