@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
   FilmDto,
   FilmsDtoResponse,
@@ -21,7 +21,10 @@ export class FilmsService {
   async getFilmScheduleById(id: string): Promise<SchedulesDtoResponse> {
     const film = await this.filmsRepository.getFilmById(id);
     if (!film) {
-      throw new NotFoundException("Film doesn't exist");
+      throw new HttpException(
+        { error: "Film doesn't exist" },
+        HttpStatus.NOT_FOUND,
+      );
     }
     const schedules: ScheduleDto[] = film.schedule ?? [];
 

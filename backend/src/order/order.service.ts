@@ -1,10 +1,5 @@
 import { FilmsRepository } from 'src/repository/films.repository';
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PostOrderDto, TicketDto } from './dto/order.dto';
 import { randomUUID } from 'node:crypto';
 
@@ -18,13 +13,19 @@ export class OrderService {
     for (const ticket of tickets) {
       const film = await this.filmsRepository.getFilmById(ticket.film);
       if (!film) {
-        throw new NotFoundException('Film not found');
+        throw new HttpException(
+          { error: 'Film not found' },
+          HttpStatus.NOT_FOUND,
+        );
       }
       const sessionId = film.schedule[0].id;
 
       const session = film.schedule.find((s) => s.id === sessionId);
       if (!session) {
-        throw new NotFoundException('Session not found');
+        throw new HttpException(
+          { error: 'Session not found' },
+          HttpStatus.NOT_FOUND,
+        );
       }
 
       if (session.taken.includes(`${ticket.row}-${ticket.seat}`)) {
