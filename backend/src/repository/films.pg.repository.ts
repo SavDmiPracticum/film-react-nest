@@ -33,7 +33,7 @@ export class FilmsPgRepository implements FilmsRepository {
       where: { id: scheduleId },
     });
     schedule.taken = [...new Set([...schedule.taken, ...seats])];
-    this.scheduleRepository.save(schedule);
+    this.scheduleRepository.update(scheduleId, schedule);
 
     return this.filmRepository.findOne({
       where: { id: filmId },
