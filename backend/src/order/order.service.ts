@@ -1,11 +1,14 @@
-import { FilmsRepository } from 'src/repository/films.repository';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { PostOrderDto, TicketDto } from './dto/order.dto';
 import { randomUUID } from 'node:crypto';
+import { FilmsRepository } from '../repository/films.type';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly filmsRepository: FilmsRepository) {}
+  constructor(
+    @Inject('FilmsRepository')
+    private readonly filmsRepository: FilmsRepository,
+  ) {}
   async createOrder(orderDto: PostOrderDto) {
     const tickets: TicketDto[] = orderDto.tickets;
     const saleTickets = [];
