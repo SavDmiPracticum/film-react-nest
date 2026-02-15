@@ -15,13 +15,13 @@ export class FilmsPgRepository implements FilmsRepository {
   ) {}
   async getFilms(): Promise<Film[]> {
     return this.filmRepository.find({
-      relations: ['schedule'],
+      relations: { schedule: true },
     });
   }
   async getFilmById(id: string): Promise<Film> {
     return this.filmRepository.findOne({
       where: { id },
-      relations: ['schedule'],
+      relations: { schedule: true },
     });
   }
   async updateFilmTaken(
@@ -30,14 +30,14 @@ export class FilmsPgRepository implements FilmsRepository {
     seats: string[],
   ): Promise<Film> {
     const schedule = await this.scheduleRepository.findOne({
-      where: { id: scheduleId, film: { id: filmId } },
+      where: { id: scheduleId },
     });
-    schedule.taken = [...schedule.taken, ...seats];
+    schedule.taken = [...new Set([...schedule.taken, ...seats])];
     this.scheduleRepository.save(schedule);
 
     return this.filmRepository.findOne({
       where: { id: filmId },
-      relations: ['schedule'],
+      relations: { schedule: true },
     });
   }
 }

@@ -31,7 +31,7 @@ export class OrderService {
         );
       }
 
-      if (session.taken.includes(`${ticket.row}-${ticket.seat}`)) {
+      if (session.taken?.includes(`${ticket.row}-${ticket.seat}`)) {
         throw new HttpException(
           { error: 'Seat is already taken' },
           HttpStatus.BAD_REQUEST,
