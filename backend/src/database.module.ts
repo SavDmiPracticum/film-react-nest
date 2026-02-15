@@ -47,7 +47,7 @@ export class DatabaseModule {
               port: config.get<number>('DATABASE_PORT', 5432),
               username: config.get<string>('DATABASE_USERNAME', 'prac'),
               password: config.get<string>('DATABASE_PASSWORD', 'prac'),
-              database: config.get<string>('DATABASE_NAME', 'prac'),
+              database: config.get<string>('DATABASE_NAME', 'films'),
               entities: [Film, Schedule],
               synchronize: config.get<boolean>('DATABASE_SYNCHRONIZE', false),
               logging: true,
