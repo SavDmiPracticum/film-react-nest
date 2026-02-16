@@ -1,15 +1,18 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import {
   FilmDto,
   FilmsDtoResponse,
   ScheduleDto,
   SchedulesDtoResponse,
 } from './dto/films.dto';
-import { FilmsRepository } from 'src/repository/films.repository';
+import { FilmsRepository } from '../repository/films.type';
 
 @Injectable()
 export class FilmsService {
-  constructor(private readonly filmsRepository: FilmsRepository) {}
+  constructor(
+    @Inject('FilmsRepository')
+    private readonly filmsRepository: FilmsRepository,
+  ) {}
   async getFilms(): Promise<FilmsDtoResponse> {
     const films: FilmDto[] = await this.filmsRepository.getFilms();
     return {
