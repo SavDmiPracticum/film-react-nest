@@ -27,7 +27,7 @@ export class Schedule {
   @Column({ type: 'double precision' })
   price: number;
 
-  @Column({ type: 'text', array: true, default: [] })
+  @Column('simple-array')
   taken: string[];
 
   @ManyToOne(() => Film, (film) => film.id)
