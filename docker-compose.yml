@@ -55,7 +55,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: ghcr.io/savdmipracticum/film-front:latest
+    image: ghcr.io/savdmipracticum/film-frontend:latest
     container_name: film-frontend
     volumes:
       - frontend:/app/dist
