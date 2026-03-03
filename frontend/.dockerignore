@@ -1,14 +1,19 @@
-node_modules
-npm-debug.log
-.git
-.gitignore
+# Deps
+node_modules/
+
+# Docker
+Dockerfile
+docker-compose.yml
+
+# README и файлы лицензий
 README.md
-.env
-.env.local
-dist
-build
-coverage
+LICENSE
+
+# Dist
+dist/
+build/
+
+# IDE Files
+.idea/
 .vscode
-.idea
-*.md
 .DS_Store
