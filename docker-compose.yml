@@ -46,7 +46,13 @@ services:
     container_name: film-frontend
     volumes:
       - frontend:/app/dist
- 
+    restart: no
+    networks:
+      - app-network
+    depends_on:
+      backend:
+        condition: service_healthy
+      
   backend:
     build:
       context: ./backend
@@ -88,8 +94,10 @@ services:
     networks:
       - app-network
     depends_on:
-      - frontend
-      - backend
+      frontend:
+          condition: service_completed_successfully
+      backend:
+          condition: service_healthy
     healthcheck:
       test:
         ['CMD-SHELL', "wget -nv -t1 --spider 'http://localhost:80/' || exit 1"]
