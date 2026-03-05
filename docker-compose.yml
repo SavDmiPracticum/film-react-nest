@@ -1,0 +1,120 @@
+services:
+  db:
+    image: postgres:18-alpine
+    container_name: film-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: prac
+      POSTGRES_USER: prac
+      POSTGRES_PASSWORD: prac
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U prac']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: film-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - app-network
+    ports:
+      - '8080:80'
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: ghcr.io/savdmipracticum/film-frontend:latest
+    container_name: film-frontend
+    volumes:
+      - frontend:/app/dist
+    restart: no
+    networks:
+      - app-network
+    depends_on:
+      backend:
+        condition: service_healthy
+      
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: ghcr.io/savdmipracticum/film-backend:latest
+    container_name: film-backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    networks:
+      - app-network
+    ports:
+      - '3000:3000'
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'node -e "require(''http'').get(''http://localhost:3000/api/afisha'', (r) => {process.exit(r.statusCode === 404 ? 0 : 1)})"',
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: ghcr.io/savdmipracticum/film-nginx:latest
+    container_name: film-nginx
+    restart: unless-stopped
+    ports:
+      - '80:80'
+    volumes:
+      - frontend:/var/www
+    networks:
+      - app-network
+    depends_on:
+      frontend:
+          condition: service_completed_successfully
+      backend:
+          condition: service_healthy
+    healthcheck:
+      test:
+        ['CMD-SHELL', "wget -nv -t1 --spider 'http://localhost:80/' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  postgres-data:
+    name: film-postgres-data
+  pgadmin-data:
+    name: film-pgadmin-data
+  frontend:
+    name: film-frontend
+  
+networks:
+  app-network:
+    name: app-network
+    driver: bridge

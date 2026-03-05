@@ -1,5 +1,9 @@
 # FILM!
 
+## Ссылка на проект
+
+http://savdmipracticum.nomorepartiessite.ru/
+
 ## Установка
 
 ### MongoDB
